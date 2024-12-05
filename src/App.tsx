@@ -1,34 +1,8 @@
-import { useState } from 'react';
-
-import './App.css';
-import StrategyContext from './strategies/StrategyContext';
-import { generateRandomTeam } from './utils/RandomTeamGenerator';
-import Unit from './models/Unit';
-import Battlefield from './components/Battlefield';
-import MeleeAttackStrategy from './strategies/MeleeAttackStrategy';
+import Battlefield from './components/Battlefield/Battlefield';
+import './global.css.ts';
 
 function App() {
-  const [teams, setTeams] = useState({
-    red: generateRandomTeam(),
-    orange: generateRandomTeam(),
-  });
-
-  const handleUnitAction = (attacker: Unit, action: string, target?: Unit) => {
-    if (target) {
-      const strategyContext = new StrategyContext(new MeleeAttackStrategy());
-      console.log('Add attack depending on action: ', action);
-      strategyContext.attack(attacker, target);
-    }
-
-    setTeams({ ...teams });
-  };
-
-  return (
-    <div className="app">
-      <h1>Battlefield</h1>
-      <Battlefield teams={teams} onUnitAction={handleUnitAction} />
-    </div>
-  );
+  return <Battlefield />;
 }
 
 export default App;
