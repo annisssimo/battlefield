@@ -40,3 +40,38 @@
 .read-the-docs {
   color: #888;
 }
+
+.app {
+  text-align: center;
+}
+
+.battlefield {
+  justify-content: space-around;
+  margin: 20px;
+}
+
+.team {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.unit {
+  padding: 5px;
+  cursor: pointer;
+  border: 1px solid #000;
+  margin: 5px;
+}
+
+.unit.defending {
+  background-color: lightblue;
+}
+
+.red {
+  border: 2px solid red;
+}
+
+.orange {
+  border: 2px solid orange;
+}

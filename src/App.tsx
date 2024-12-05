@@ -1,35 +1,34 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useState } from 'react';
+
+import './App.css';
+import StrategyContext from './strategies/StrategyContext';
+import { generateRandomTeam } from './utils/RandomTeamGenerator';
+import Unit from './models/Unit';
+import Battlefield from './components/Battlefield';
+import MeleeAttackStrategy from './strategies/MeleeAttackStrategy';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [teams, setTeams] = useState({
+    red: generateRandomTeam(),
+    orange: generateRandomTeam(),
+  });
+
+  const handleUnitAction = (attacker: Unit, action: string, target?: Unit) => {
+    if (target) {
+      const strategyContext = new StrategyContext(new MeleeAttackStrategy());
+      console.log('Add attack depending on action: ', action);
+      strategyContext.attack(attacker, target);
+    }
+
+    setTeams({ ...teams });
+  };
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="app">
+      <h1>Battlefield</h1>
+      <Battlefield teams={teams} onUnitAction={handleUnitAction} />
+    </div>
+  );
 }
 
-export default App
+export default App;
