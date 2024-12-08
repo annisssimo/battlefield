@@ -1,50 +1,58 @@
-import { useState } from 'react';
-
-import StrategyContext from '../../strategies/StrategyContext';
+import { useState, useEffect } from 'react';
 import { generateRandomTeam } from '../../utils/RandomTeamGenerator';
 import Unit from '../../models/Unit';
-import MeleeAttackStrategy from '../../strategies/MeleeAttackStrategy';
 import TeamField from '../TeamField/TeamField';
 import * as style from './Battlefield.css';
+import RoundInfo from '../RoundInfo/RoundInfo';
 
 const Battlefield = () => {
-  const [teams, setTeams] = useState({
-    red: generateRandomTeam(),
-    orange: generateRandomTeam(),
+  const [teams, setTeams] = useState<{ red: Unit[]; orange: Unit[] }>({
+    red: [],
+    orange: [],
   });
 
-  const handleUnitAction = (
-    attacker: Unit,
-    action: string,
-    target?: Unit
-  ): void => {
-    if (target) {
-      const strategyContext = new StrategyContext(new MeleeAttackStrategy());
-      strategyContext.attack(attacker, target);
-    }
+  const [sortedUnits, setSortedUnits] = useState<Unit[]>([]);
+  const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
 
-    console.log('Action: ', action);
-    setTeams({ ...teams });
-  };
+  useEffect(() => {
+    console.log(highlightedUnit);
+  });
 
-  const handleUnitClick = (team: Unit[], unit: Unit): void => {
-    const targetTeam = team === teams.red ? teams.orange : teams.red;
-    handleUnitAction(unit, 'meleeAttack', targetTeam[0]); // Атакуем первого юнита противоположной команды
+  useEffect(() => {
+    const redTeam = generateRandomTeam('red');
+    const orangeTeam = generateRandomTeam('orange');
+    setTeams({ red: redTeam, orange: orangeTeam });
+
+    const allUnits = [...redTeam, ...orangeTeam].sort((a, b) => {
+      if (a.initiative === b.initiative) {
+        return Math.random() - 0.5;
+      }
+      return b.initiative - a.initiative;
+    });
+
+    setSortedUnits(allUnits);
+  }, []);
+
+  const handleHighlightUnit = (unit: Unit | null) => {
+    setHighlightedUnit(unit);
   };
 
   return (
-    <div className={style.battlefield}>
-      <TeamField
-        team={teams.red}
-        color="red"
-        handleUnitClick={handleUnitClick}
-      />
-      <h2>VS</h2>
-      <TeamField
-        team={teams.orange}
-        color="orange"
-        handleUnitClick={handleUnitClick}
-      />
+    <div className={style.app}>
+      <div className={style.battlefield}>
+        <TeamField
+          team={teams.red}
+          color="red"
+          highlightedUnit={highlightedUnit}
+        />
+        <h2>VS</h2>
+        <TeamField
+          team={teams.orange}
+          color="orange"
+          highlightedUnit={highlightedUnit}
+        />
+      </div>
+      <RoundInfo units={sortedUnits} onHighlightUnit={handleHighlightUnit} />
     </div>
   );
 };

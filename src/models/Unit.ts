@@ -1,28 +1,40 @@
+import { v4 as uuidv4 } from 'uuid';
+
+import UnitState from './UnitState';
+
 abstract class Unit {
+  id: string;
   name: string;
   healthPoints: number;
   damage: number;
   initiative: number;
-  isDefending: boolean = false;
-  isParalyzed: boolean = false;
   image: string;
+  team: 'red' | 'orange';
+  teamIndex: number;
+  state: UnitState;
 
   constructor(
     name: string,
     health: number,
     damage: number,
     initiative: number,
-    image: string
+    image: string,
+    team: 'red' | 'orange',
+    teamIndex: number
   ) {
+    this.id = uuidv4();
     this.name = name;
     this.healthPoints = health;
     this.damage = damage;
     this.initiative = initiative;
     this.image = image;
+    this.team = team;
+    this.teamIndex = teamIndex;
+    this.state = new UnitState();
   }
 
   takeDamage(amount: number) {
-    this.healthPoints -= this.isDefending ? amount / 2 : amount;
+    this.healthPoints -= this.state.isDefending ? amount / 2 : amount;
     if (this.healthPoints < 0) this.healthPoints = 0;
   }
 
@@ -31,11 +43,11 @@ abstract class Unit {
   }
 
   setDefending(state: boolean) {
-    this.isDefending = state;
+    this.state.isDefending = state;
   }
 
   setParalyzed(state: boolean) {
-    this.isParalyzed = state;
+    this.state.isParalyzed = state;
   }
 
   abstract canAttack(target: Unit): boolean;

@@ -1,18 +1,16 @@
-import { Key } from 'react';
 import GameUnitCard from '../GameUnitCard/GameUnitCard';
 import Unit from '../../models/Unit';
 import * as style from './TeamField.css';
 
-const TeamField = ({ team, color, handleUnitClick }: TeamFieldProps) => {
+const TeamField = ({ team, color, highlightedUnit }: TeamFieldProps) => {
   return (
     <div className={style.teamContainer}>
-      {team.map((unit, index: Key) => (
+      {team.map((unit) => (
         <GameUnitCard
-          key={index}
+          key={unit.id}
           unit={unit}
-          team={team}
           color={color}
-          handleUnitClick={() => handleUnitClick(team, unit)}
+          highlightedUnit={highlightedUnit}
         />
       ))}
     </div>
@@ -24,5 +22,5 @@ export default TeamField;
 interface TeamFieldProps {
   team: Unit[];
   color: 'red' | 'orange';
-  handleUnitClick: (team: Unit[], unit: Unit) => void;
+  highlightedUnit: Unit | null;
 }

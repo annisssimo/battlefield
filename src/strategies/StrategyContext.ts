@@ -12,11 +12,13 @@ class StrategyContext {
     this.actionStrategy = actionStrategy;
   }
 
-  public attack(attacker: Unit, target?: Unit): void {
-    console.log(
-      "StrategyContext: Executing action using the ActionStrategy (not sure how it'll do it)"
-    );
-    this.actionStrategy.executeAction(attacker, target);
+  public attack(
+    attacker: Unit,
+    target: Unit | undefined,
+    allUnits: { red: Unit[]; orange: Unit[] }
+  ): void {
+    console.log(`Executing action for ${attacker.name}`);
+    this.actionStrategy.executeAction(attacker, target, allUnits);
   }
 }
 
