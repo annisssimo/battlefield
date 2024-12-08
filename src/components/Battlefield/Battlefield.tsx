@@ -13,10 +13,8 @@ const Battlefield = () => {
 
   const [sortedUnits, setSortedUnits] = useState<Unit[]>([]);
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
-
-  useEffect(() => {
-    console.log(highlightedUnit);
-  });
+  //eslint-disable-next-line
+  const [currentUnitIndex, setCurrentUnitIndex] = useState(0);
 
   useEffect(() => {
     const redTeam = generateRandomTeam('red');
@@ -44,12 +42,14 @@ const Battlefield = () => {
           team={teams.red}
           color="red"
           highlightedUnit={highlightedUnit}
+          currentUnitId={sortedUnits[currentUnitIndex]?.id}
         />
         <h2>VS</h2>
         <TeamField
           team={teams.orange}
           color="orange"
           highlightedUnit={highlightedUnit}
+          currentUnitId={sortedUnits[currentUnitIndex]?.id}
         />
       </div>
       <RoundInfo units={sortedUnits} onHighlightUnit={handleHighlightUnit} />

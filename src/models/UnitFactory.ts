@@ -14,7 +14,6 @@ export const UnitFactory = (
   index: number
 ): Unit => {
   const data = GameUnits[name as keyof typeof GameUnits];
-  console.log(data);
   switch (data.type) {
     case UnitType.Melee:
       return new MeleeUnit(

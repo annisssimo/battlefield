@@ -2,12 +2,24 @@ import { FaHeart } from 'react-icons/fa';
 import Unit from '../../models/Unit';
 import * as style from './GameUnitCard.css';
 
-const GameUnitCard = ({ unit, color, highlightedUnit }: GameUnitCardProps) => {
+const GameUnitCard = ({
+  unit,
+  color,
+  highlightedUnit,
+  isCurrent,
+}: GameUnitCardProps) => {
   const unitClass = style.unitState({
     isDefending: unit.state.isDefending,
     isHighlighted: highlightedUnit?.id === unit.id,
+    isCurrent,
     color,
   });
+
+  const handleDefending = (): void => {
+    unit.setDefending(true);
+    console.log('defend!');
+    console.log(unit);
+  };
 
   return (
     <div className={unitClass}>
@@ -20,10 +32,13 @@ const GameUnitCard = ({ unit, color, highlightedUnit }: GameUnitCardProps) => {
           </div>
           <b>{unit.name}</b>
           <br />
-          <span>Initiative: {unit.initiative}</span>
-          <br />
           <span>Damage: {unit.damage}</span>
           <br />
+          {isCurrent && (
+            <button className={style.defendButton} onClick={handleDefending}>
+              Defend
+            </button>
+          )}
         </figcaption>
       </figure>
     </div>
@@ -34,6 +49,7 @@ export default GameUnitCard;
 
 interface GameUnitCardProps {
   unit: Unit;
-  color: 'red' | 'orange';
   highlightedUnit: Unit | null;
+  isCurrent: boolean;
+  color: 'red' | 'orange';
 }

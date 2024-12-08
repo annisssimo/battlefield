@@ -25,6 +25,12 @@ export const unitState = recipe({
       },
       false: {},
     },
+    isCurrent: {
+      true: {
+        boxShadow: '0 0 20px green',
+      },
+      false: {},
+    },
     color: {
       red: {
         border: '2px solid black',
@@ -72,4 +78,29 @@ export const healthPoints = style({
   left: '4px',
   color: 'white',
   fontSize: '12px',
+});
+
+export const defendButton = style({
+  padding: '10px 15px',
+  fontSize: '14px',
+  fontWeight: 'bold',
+  color: '#fff',
+  backgroundColor: '#007bff',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  transition: 'background-color 0.3s ease, transform 0.2s ease',
+
+  selectors: {
+    '&:hover': {
+      backgroundColor: '#0056b3',
+    },
+    '&:active': {
+      transform: 'scale(0.95)',
+    },
+    '&:disabled': {
+      backgroundColor: '#6c757d',
+      cursor: 'not-allowed',
+    },
+  },
 });

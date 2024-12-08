@@ -2,7 +2,12 @@ import GameUnitCard from '../GameUnitCard/GameUnitCard';
 import Unit from '../../models/Unit';
 import * as style from './TeamField.css';
 
-const TeamField = ({ team, color, highlightedUnit }: TeamFieldProps) => {
+const TeamField = ({
+  team,
+  color,
+  highlightedUnit,
+  currentUnitId,
+}: TeamFieldProps) => {
   return (
     <div className={style.teamContainer}>
       {team.map((unit) => (
@@ -11,6 +16,7 @@ const TeamField = ({ team, color, highlightedUnit }: TeamFieldProps) => {
           unit={unit}
           color={color}
           highlightedUnit={highlightedUnit}
+          isCurrent={unit.id === currentUnitId}
         />
       ))}
     </div>
@@ -23,4 +29,5 @@ interface TeamFieldProps {
   team: Unit[];
   color: 'red' | 'orange';
   highlightedUnit: Unit | null;
+  currentUnitId: string | null;
 }
