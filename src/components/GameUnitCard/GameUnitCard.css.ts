@@ -3,6 +3,7 @@ import { recipe } from '@vanilla-extract/recipes';
 
 export const unitState = recipe({
   base: {
+    position: 'relative',
     cursor: 'pointer',
     border: '1px solid #000',
     margin: '5px 30px',
@@ -36,7 +37,7 @@ export const unitState = recipe({
     },
     isPossibleTarget: {
       true: {
-        border: '3px solid red !important',
+        border: '3px solid red',
       },
       false: {},
     },

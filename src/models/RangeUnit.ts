@@ -1,7 +1,8 @@
+import { ActionType } from '../types/types';
 import Unit from './Unit';
 
 class RangeUnit extends Unit {
-  getActionType(): string {
+  getActionType(): ActionType {
     return 'rangeAttack';
   }
 

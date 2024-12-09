@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import UnitState from './UnitState';
-import { TeamNames } from '../types/types';
+import { ActionType, TeamNames } from '../types/types';
 
 abstract class Unit {
   id: string;
@@ -48,7 +48,7 @@ abstract class Unit {
   }
 
   abstract canAttack(target: Unit): boolean;
-  abstract getActionType(): string;
+  abstract getActionType(): ActionType;
 }
 
 export default Unit;

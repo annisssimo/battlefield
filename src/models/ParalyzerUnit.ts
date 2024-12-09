@@ -1,7 +1,8 @@
+import { ActionType } from '../types/types';
 import Unit from './Unit';
 
 class ParalyzerUnit extends Unit {
-  getActionType(): string {
+  getActionType(): ActionType {
     return 'paralyze';
   }
 

@@ -1,9 +1,10 @@
+import { ActionType } from '../types/types';
 import Unit from './Unit';
 
 class HealerUnitMass extends Unit {
   healAmount: number = 25;
 
-  getActionType(): string {
+  getActionType(): ActionType {
     return 'healMass';
   }
 

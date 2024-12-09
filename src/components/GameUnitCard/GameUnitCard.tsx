@@ -4,7 +4,8 @@ import { FaHeart } from 'react-icons/fa';
 
 import Unit from '../../models/Unit';
 import * as style from './GameUnitCard.css';
-import { TeamNames } from '../../types/types';
+import { GeneralActionType, TeamNames } from '../../types/types';
+import ActionIcon from '../ActionIcon/ActionIcon';
 
 const GameUnitCard = ({
   unit,
@@ -12,8 +13,10 @@ const GameUnitCard = ({
   highlightedUnit,
   isCurrent,
   onEndTurn,
+  attackerActionType,
 }: GameUnitCardProps) => {
   const [isDefending, setIsDefending] = useState(unit.state.isDefending);
+  const [isHovered, setIsHovered] = useState(false);
 
   const unitClass = style.unitState({
     isHighlighted: highlightedUnit?.id === unit.id,
@@ -29,8 +32,18 @@ const GameUnitCard = ({
   };
 
   return (
-    <div className={unitClass}>
+    <div
+      className={unitClass}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={() => setIsHovered(false)}
+    >
       <figure className={style.unitFigure}>
+        {unit.state.isPossibleTarget && (
+          <ActionIcon
+            showActionIcon={isHovered}
+            actionType={attackerActionType as GeneralActionType}
+          />
+        )}
         <img src={unit.image} alt={unit.name} className={style.unitImage} />
         <figcaption className={style.unitCaption}>
           <div className={style.hp}>
@@ -63,4 +76,5 @@ interface GameUnitCardProps {
   isCurrent: boolean;
   color: TeamNames;
   onEndTurn: () => void;
+  attackerActionType: string | null;
 }

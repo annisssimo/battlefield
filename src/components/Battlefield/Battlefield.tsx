@@ -1,22 +1,22 @@
 import { useState, useEffect } from 'react';
 
-import { generateRandomTeam } from '../../utils/RandomTeamGenerator';
+import { generateRandomTeam } from '../../utils/randomTeamGenerator';
 import Unit from '../../models/Unit';
 import TeamField from '../TeamField/TeamField';
 import * as style from './Battlefield.css';
 import RoundInfo from '../RoundInfo/RoundInfo';
 import StrategyFactory from '../../strategies/StrategyFactory';
 import { AllUnits } from '../../types/types';
+import { useCurrentUnit } from '../../hooks/useCurrentUnit';
 
 const Battlefield = () => {
   const [teams, setTeams] = useState<AllUnits>({
     red: [],
     orange: [],
   });
-
   const [sortedUnits, setSortedUnits] = useState<Unit[]>([]);
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
-  const [currentUnitIndex, setCurrentUnitIndex] = useState(0);
+  const { currentUnit, setCurrentUnit } = useCurrentUnit();
 
   useEffect(() => {
     const redTeam = generateRandomTeam('red');
@@ -35,21 +35,26 @@ const Battlefield = () => {
 
   useEffect(() => {
     if (sortedUnits.length > 0) {
-      const currentUnit = sortedUnits[currentUnitIndex];
+      const currentUnit = sortedUnits[0];
+      setCurrentUnit(currentUnit);
       const strategy = StrategyFactory.createStrategy(
         currentUnit.getActionType()
       );
       strategy.highlightTargets(currentUnit, teams);
       setHighlightedUnit(currentUnit);
     }
-  }, [currentUnitIndex, sortedUnits, teams]);
+  }, [sortedUnits, teams, setCurrentUnit]);
 
   const handleHighlightUnit = (unit: Unit | null) => {
     setHighlightedUnit(unit);
   };
 
   const nextTurn = () => {
-    setCurrentUnitIndex((prevIndex) => (prevIndex + 1) % sortedUnits.length);
+    if (!currentUnit) return;
+
+    const nextUnitIndex =
+      (sortedUnits.indexOf(currentUnit) + 1) % sortedUnits.length;
+    setCurrentUnit(sortedUnits[nextUnitIndex]);
   };
 
   return (
@@ -59,7 +64,7 @@ const Battlefield = () => {
           team={teams.red}
           color="red"
           highlightedUnit={highlightedUnit}
-          currentUnitId={sortedUnits[currentUnitIndex]?.id}
+          currentUnitId={currentUnit?.id || ''}
           onEndTurn={nextTurn}
         />
         <h2>VS</h2>
@@ -67,14 +72,14 @@ const Battlefield = () => {
           team={teams.orange}
           color="orange"
           highlightedUnit={highlightedUnit}
-          currentUnitId={sortedUnits[currentUnitIndex]?.id}
+          currentUnitId={currentUnit?.id || ''}
           onEndTurn={nextTurn}
         />
       </div>
       <RoundInfo
         units={sortedUnits}
         onHighlightUnit={handleHighlightUnit}
-        currentUnitIndex={currentUnitIndex}
+        currentUnitIndex={sortedUnits.indexOf(currentUnit!)}
       />
     </div>
   );

@@ -1,7 +1,9 @@
 import GameUnitCard from '../GameUnitCard/GameUnitCard';
 import Unit from '../../models/Unit';
 import * as style from './TeamField.css';
-import { TeamNames } from '../../types/types';
+import { GeneralActionType, TeamNames } from '../../types/types';
+import { mapToGeneralActionType } from '../../utils/actionMapper';
+import { useCurrentUnit } from '../../hooks/useCurrentUnit';
 
 const TeamField = ({
   team,
@@ -10,6 +12,8 @@ const TeamField = ({
   currentUnitId,
   onEndTurn,
 }: TeamFieldProps) => {
+  const { currentUnit } = useCurrentUnit();
+
   return (
     <div className={style.teamContainer}>
       {team.map((unit) => (
@@ -20,6 +24,13 @@ const TeamField = ({
           highlightedUnit={highlightedUnit}
           isCurrent={unit.id === currentUnitId}
           onEndTurn={onEndTurn}
+          attackerActionType={
+            currentUnit
+              ? (mapToGeneralActionType(
+                  currentUnit.getActionType()
+                ) as GeneralActionType)
+              : null
+          }
         />
       ))}
     </div>
