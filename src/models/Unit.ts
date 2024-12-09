@@ -51,6 +51,7 @@ abstract class Unit {
   }
 
   abstract canAttack(target: Unit): boolean;
+  abstract getActionType(): string;
 }
 
 export default Unit;

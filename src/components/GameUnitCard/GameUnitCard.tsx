@@ -11,6 +11,7 @@ const GameUnitCard = ({
   const unitClass = style.unitState({
     isDefending: unit.state.isDefending,
     isHighlighted: highlightedUnit?.id === unit.id,
+    isPossibleTarget: unit.state.isPossibleTarget,
     isCurrent,
     color,
   });
@@ -22,7 +23,11 @@ const GameUnitCard = ({
   };
 
   return (
-    <div className={unitClass}>
+    <div
+      className={`${unitClass} ${
+        unit.state.isPossibleTarget ? style.target : ''
+      }`}
+    >
       <figure className={style.unitFigure}>
         <img src={unit.image} alt={unit.name} className={style.unitImage} />
         <figcaption className={style.unitCaption}>

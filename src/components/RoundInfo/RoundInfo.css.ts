@@ -28,6 +28,9 @@ export const unitItem = styleVariants({
     backgroundColor: 'rgba(255, 255, 0, 0.3)',
     transform: 'scale(1.05)',
   },
+  current: {
+    backgroundColor: '#00ff0060',
+  },
 });
 
 export const unitImage = style({

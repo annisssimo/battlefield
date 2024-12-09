@@ -4,6 +4,7 @@ import Unit from '../../models/Unit';
 import TeamField from '../TeamField/TeamField';
 import * as style from './Battlefield.css';
 import RoundInfo from '../RoundInfo/RoundInfo';
+import StrategyFactory from '../../strategies/StrategyFactory';
 
 const Battlefield = () => {
   const [teams, setTeams] = useState<{ red: Unit[]; orange: Unit[] }>({
@@ -31,6 +32,17 @@ const Battlefield = () => {
     setSortedUnits(allUnits);
   }, []);
 
+  useEffect(() => {
+    if (sortedUnits.length > 0) {
+      const currentUnit = sortedUnits[currentUnitIndex];
+      const strategy = StrategyFactory.createStrategy(
+        currentUnit.getActionType()
+      );
+      strategy.highlightTargets(currentUnit, teams);
+      setHighlightedUnit(currentUnit);
+    }
+  }, [currentUnitIndex, sortedUnits, teams]);
+
   const handleHighlightUnit = (unit: Unit | null) => {
     setHighlightedUnit(unit);
   };
@@ -52,7 +64,11 @@ const Battlefield = () => {
           currentUnitId={sortedUnits[currentUnitIndex]?.id}
         />
       </div>
-      <RoundInfo units={sortedUnits} onHighlightUnit={handleHighlightUnit} />
+      <RoundInfo
+        units={sortedUnits}
+        onHighlightUnit={handleHighlightUnit}
+        currentUnitIndex={currentUnitIndex}
+      />
     </div>
   );
 };

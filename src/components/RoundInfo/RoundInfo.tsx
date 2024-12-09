@@ -3,7 +3,11 @@ import { useState } from 'react';
 import Unit from '../../models/Unit';
 import * as style from './RoundInfo.css';
 
-const RoundInfo = ({ units, onHighlightUnit }: RoundInfoProps) => {
+const RoundInfo = ({
+  units,
+  onHighlightUnit,
+  currentUnitIndex,
+}: RoundInfoProps) => {
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
 
   const handleMouseEnter = (unit: Unit) => {
@@ -25,6 +29,10 @@ const RoundInfo = ({ units, onHighlightUnit }: RoundInfoProps) => {
             key={unit.id}
             className={`${style.unitItem.default} ${
               highlightedUnit?.id === unit.id ? style.unitItem.highlighted : ''
+            } ${
+              units.indexOf(unit) === currentUnitIndex
+                ? style.unitItem.current
+                : ''
             }`}
             onMouseEnter={() => handleMouseEnter(unit)}
             onMouseLeave={handleMouseLeave}
@@ -45,4 +53,5 @@ export default RoundInfo;
 interface RoundInfoProps {
   units: Unit[];
   onHighlightUnit: (unit: Unit | null) => void;
+  currentUnitIndex: number;
 }

@@ -27,7 +27,13 @@ export const unitState = recipe({
     },
     isCurrent: {
       true: {
-        boxShadow: '0 0 20px green',
+        boxShadow: '0 0 40px lime',
+      },
+      false: {},
+    },
+    isPossibleTarget: {
+      true: {
+        boxShadow: '0 0 10px rgba(255, 0, 0, 0.8)',
       },
       false: {},
     },
@@ -103,4 +109,8 @@ export const defendButton = style({
       cursor: 'not-allowed',
     },
   },
+});
+
+export const target = style({
+  border: '3px solid red',
 });

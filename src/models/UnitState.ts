@@ -1,6 +1,7 @@
 class UnitState {
   isDefending: boolean = false;
   isParalyzed: boolean = false;
+  isPossibleTarget: boolean = false;
 
   setDefending(state: boolean) {
     this.isDefending = state;
@@ -8,6 +9,10 @@ class UnitState {
 
   setParalyzed(state: boolean) {
     this.isParalyzed = state;
+  }
+
+  setPossibleTarget(state: boolean) {
+    this.isPossibleTarget = state;
   }
 }
 
