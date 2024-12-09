@@ -2,8 +2,9 @@ import ActionStrategy from './ActionStrategy';
 import MeleeAttackStrategy from './MeleeAttackStrategy';
 import RangeAttackStrategy from './RangeAttackStrategy';
 import MageAttackStrategy from './MageAttackStrategy';
-// import HealerStrategy from './HealerStrategy';
-// import ParalyzerStrategy from './ParalyzerStrategy';
+import SingleHealerStrategy from './SingleHealerStrategy';
+import MassHealerStrategy from './MassHealerStrategy';
+import ParalyzerStrategy from './ParalyzerStrategy';
 
 class StrategyFactory {
   static createStrategy(action: string): ActionStrategy {
@@ -14,10 +15,12 @@ class StrategyFactory {
         return new RangeAttackStrategy();
       case 'mageAttack':
         return new MageAttackStrategy();
-      // case 'heal':
-      //   return new HealerStrategy();
-      // case 'paralyze':
-      //   return new ParalyzerStrategy();
+      case 'healSingle':
+        return new SingleHealerStrategy();
+      case 'healMass':
+        return new MassHealerStrategy();
+      case 'paralyze':
+        return new ParalyzerStrategy();
       default:
         throw new Error(`Unknown action strategy: ${action}`);
     }

@@ -1,8 +1,10 @@
 import Unit from './Unit';
 
 class HealerUnitMass extends Unit {
+  healAmount: number = 25;
+
   getActionType(): string {
-    return 'heal';
+    return 'healMass';
   }
 
   canAttack(target: Unit): boolean {

@@ -5,7 +5,7 @@ import { AllUnits } from '../types/types';
 import ActionStrategy from './ActionStrategy';
 import BaseStrategy from './BaseStrategy';
 
-class RangeAttackStrategy extends BaseStrategy implements ActionStrategy {
+class ParalyzerStrategy extends BaseStrategy implements ActionStrategy {
   highlightTargets(attacker: Unit, allUnits: AllUnits) {
     const enemyTeam = this.getEnemyTeam(attacker, allUnits);
 
@@ -20,9 +20,9 @@ class RangeAttackStrategy extends BaseStrategy implements ActionStrategy {
       return;
     }
 
-    console.log(`${attacker.name} attacks ${target.name}!`);
-    target.takeDamage(attacker.damage);
+    console.log(`${attacker.name} paralyzes ${target.name}!`);
+    target.state.setParalyzed(true);
   }
 }
 
-export default RangeAttackStrategy;
+export default ParalyzerStrategy;

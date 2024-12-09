@@ -46,24 +46,14 @@ class AttackRangeCalculator {
   }
 
   /**
-   * Определяет все доступные индексы для дальнего боя.
-   * @param enemyTeam Вражеская команда.
-   * @returns Массив индексов доступных целей.
-   */
-  static calculateRangeAttack(enemyTeam: Unit[]): number[] {
-    // Возвращаем индексы всех живых юнитов
-    return enemyTeam
-      .map((unit, index) => (unit.isAlive() ? index : -1))
-      .filter((index) => index !== -1);
-  }
-
-  /**
    * Возвращает индексы всех врагов для массовой атаки (например, магов).
    * @param enemyTeam Вражеская команда.
    * @returns Массив индексов всех врагов.
    */
   static calculateMassAttack(enemyTeam: Unit[]): number[] {
-    return enemyTeam.map((_, index) => index); // Все индексы
+    return enemyTeam
+      .map((unit, index) => (unit.isAlive() ? index : -1))
+      .filter((index) => index !== -1);
   }
 }
 

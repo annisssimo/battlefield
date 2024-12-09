@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+
 import { generateRandomTeam } from '../../utils/RandomTeamGenerator';
 import Unit from '../../models/Unit';
 import TeamField from '../TeamField/TeamField';
