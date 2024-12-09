@@ -11,6 +11,7 @@ const GameUnitCard = ({
   color,
   highlightedUnit,
   isCurrent,
+  onEndTurn,
 }: GameUnitCardProps) => {
   const [isDefending, setIsDefending] = useState(unit.state.isDefending);
 
@@ -24,6 +25,7 @@ const GameUnitCard = ({
   const handleDefending = (): void => {
     setIsDefending((prev) => !prev);
     unit.state.setDefending(true);
+    if (onEndTurn) onEndTurn();
   };
 
   return (
@@ -60,4 +62,5 @@ interface GameUnitCardProps {
   highlightedUnit: Unit | null;
   isCurrent: boolean;
   color: TeamNames;
+  onEndTurn: () => void;
 }

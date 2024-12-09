@@ -16,7 +16,6 @@ const Battlefield = () => {
 
   const [sortedUnits, setSortedUnits] = useState<Unit[]>([]);
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
-  //eslint-disable-next-line
   const [currentUnitIndex, setCurrentUnitIndex] = useState(0);
 
   useEffect(() => {
@@ -49,6 +48,10 @@ const Battlefield = () => {
     setHighlightedUnit(unit);
   };
 
+  const nextTurn = () => {
+    setCurrentUnitIndex((prevIndex) => (prevIndex + 1) % sortedUnits.length);
+  };
+
   return (
     <div className={style.app}>
       <div className={style.battlefield}>
@@ -57,6 +60,7 @@ const Battlefield = () => {
           color="red"
           highlightedUnit={highlightedUnit}
           currentUnitId={sortedUnits[currentUnitIndex]?.id}
+          onEndTurn={nextTurn}
         />
         <h2>VS</h2>
         <TeamField
@@ -64,6 +68,7 @@ const Battlefield = () => {
           color="orange"
           highlightedUnit={highlightedUnit}
           currentUnitId={sortedUnits[currentUnitIndex]?.id}
+          onEndTurn={nextTurn}
         />
       </div>
       <RoundInfo

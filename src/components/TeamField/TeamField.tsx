@@ -8,6 +8,7 @@ const TeamField = ({
   color,
   highlightedUnit,
   currentUnitId,
+  onEndTurn,
 }: TeamFieldProps) => {
   return (
     <div className={style.teamContainer}>
@@ -18,6 +19,7 @@ const TeamField = ({
           color={color}
           highlightedUnit={highlightedUnit}
           isCurrent={unit.id === currentUnitId}
+          onEndTurn={onEndTurn}
         />
       ))}
     </div>
@@ -31,4 +33,5 @@ interface TeamFieldProps {
   color: TeamNames;
   highlightedUnit: Unit | null;
   currentUnitId: string | null;
+  onEndTurn: () => void;
 }
