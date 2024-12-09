@@ -24,12 +24,6 @@ export const unitState = recipe({
       },
       false: {},
     },
-    isPossibleTarget: {
-      true: {
-        boxShadow: '0 0 10px rgba(255, 0, 0, 0.8)',
-      },
-      false: {},
-    },
     color: {
       red: {
         border: '2px solid black',
@@ -39,6 +33,12 @@ export const unitState = recipe({
         border: '2px solid black',
         backgroundColor: '#ffa21f',
       },
+    },
+    isPossibleTarget: {
+      true: {
+        border: '3px solid red !important',
+      },
+      false: {},
     },
   },
 });
@@ -108,8 +108,4 @@ export const defendButton = recipe({
       false: {},
     },
   },
-});
-
-export const target = style({
-  border: '3px solid red',
 });
