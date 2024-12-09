@@ -1,14 +1,18 @@
 import Unit from '../models/Unit';
+import { TeamNames } from '../types/types';
 import ActionStrategy from './ActionStrategy';
 
 class MeleeAttackStrategy implements ActionStrategy {
   highlightTargets(attacker: Unit, allUnits: { red: Unit[]; orange: Unit[] }) {
-    const enemyTeam = attacker.team === 'red' ? allUnits.orange : allUnits.red;
+    const enemyTeam = this.getEnemyTeam(attacker, allUnits);
+
     const allowedIndices = this.calculateAllowedIndices(
       attacker.teamIndex,
       attacker.team,
       enemyTeam
     );
+
+    console.log('allowedIndices: ', allowedIndices);
 
     enemyTeam.forEach((unit) => unit.state.setPossibleTarget(false));
 
@@ -21,91 +25,47 @@ class MeleeAttackStrategy implements ActionStrategy {
 
   executeAction(
     attacker: Unit,
-    target?: Unit,
-    allUnits?: { red: Unit[]; orange: Unit[] }
+    target: Unit,
+    allUnits: { red: Unit[]; orange: Unit[] }
   ): void {
-    if (!target) {
-      console.log(`${attacker.name} has no target to attack!`);
-      return;
-    }
+    const enemyTeam = this.getEnemyTeam(attacker, allUnits);
 
-    const attackerTeam = attacker.team;
-    const enemyTeam = attackerTeam === 'red' ? 'orange' : 'red';
-
-    if (!this.isTargetWithinRange(attacker, target, allUnits![enemyTeam])) {
-      console.log(`${attacker.name} can't reach ${target.name}!`);
-      return;
-    }
+    console.log(enemyTeam);
 
     console.log(`${attacker.name} attacks ${target.name}!`);
     target.takeDamage(attacker.damage);
   }
 
-  private isTargetWithinRange(
+  private getEnemyTeam(
     attacker: Unit,
-    target: Unit,
-    enemyTeam: Unit[]
-  ): boolean {
-    const attackerIndex = attacker.teamIndex ?? 0;
-    const targetIndex = target.teamIndex ?? 0;
-
-    // Определяем допустимые индексы для атаки
-    const allowedRanges = this.calculateAllowedIndices(
-      attackerIndex,
-      attacker.team ?? 'red',
-      enemyTeam
-    );
-
-    return allowedRanges.includes(targetIndex);
+    allUnits: { red: Unit[]; orange: Unit[] }
+  ) {
+    return attacker.team === 'red' ? allUnits.orange : allUnits.red;
   }
 
   private calculateAllowedIndices(
     attackerIndex: number,
-    team: 'red' | 'orange',
+    attackerTeam: TeamNames,
     enemyTeam: Unit[]
   ): number[] {
-    const availableTargets = enemyTeam.filter((unit) => unit.healthPoints > 0);
-    if (availableTargets.length === 0) return []; // Нет доступных целей
+    console.log(attackerIndex);
+    console.log(attackerTeam);
+    console.log(enemyTeam);
 
-    // Приведение индекса атакующего к диапазону от 0 до 2
-    const normalizedAttackerIndex = attackerIndex - 3;
-    if (normalizedAttackerIndex < 0 || normalizedAttackerIndex > 2) {
-      console.warn(`Invalid attacker index: ${attackerIndex}`);
-      return []; // Вернуть пустой массив, если индекс выходит за пределы
-    }
-
-    const defaultRanges: { [key: string]: number[][] } = {
-      red: [
-        [0, 1],
-        [0, 1, 2],
-        [1, 2],
-      ],
-      orange: [
-        [0, 1],
-        [0, 1, 2],
-        [1, 2],
-      ],
+    const ranges: Record<TeamNames, Record<number, number[]>> = {
+      red: {
+        3: [0, 1],
+        4: [0, 1, 2],
+        5: [1, 2],
+      },
+      orange: {
+        0: [3, 4],
+        1: [3, 4, 5],
+        2: [4, 5],
+      },
     };
 
-    const allowedIndices = defaultRanges[team][normalizedAttackerIndex] || [];
-    const maxIndex = enemyTeam.length - 1;
-
-    // Проверка на мертвую первую линию
-    const isFrontLineDead = allowedIndices.every(
-      (index) => !enemyTeam[index]?.healthPoints
-    );
-
-    if (isFrontLineDead) {
-      // Все ближайшие мертвы, возвращаем все доступные индексы
-      return enemyTeam
-        .map((_, index) => index)
-        .filter((i) => enemyTeam[i]?.healthPoints > 0);
-    }
-
-    // Возвращаем только живых из допустимого диапазона
-    return allowedIndices.filter(
-      (index) => index <= maxIndex && enemyTeam[index]?.healthPoints > 0
-    );
+    return ranges[attackerTeam][attackerIndex] || [];
   }
 }
 

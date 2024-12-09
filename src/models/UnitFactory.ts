@@ -7,10 +7,11 @@ import HealerUnitMass from '../models/HealerUnitMass';
 import ParalyzerUnit from '../models/ParalyzerUnit';
 import { UnitType, UnitName } from '../enums/unit.enums';
 import { GameUnits } from '../enums/game.units';
+import { TeamNames } from '../types/types';
 
 export const UnitFactory = (
   name: UnitName,
-  team: 'red' | 'orange',
+  team: TeamNames,
   index: number
 ): Unit => {
   const data = GameUnits[name as keyof typeof GameUnits];

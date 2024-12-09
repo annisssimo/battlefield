@@ -1,6 +1,7 @@
 import { FaHeart } from 'react-icons/fa';
 import Unit from '../../models/Unit';
 import * as style from './GameUnitCard.css';
+import { TeamNames } from '../../types/types';
 
 const GameUnitCard = ({
   unit,
@@ -56,5 +57,5 @@ interface GameUnitCardProps {
   unit: Unit;
   highlightedUnit: Unit | null;
   isCurrent: boolean;
-  color: 'red' | 'orange';
+  color: TeamNames;
 }

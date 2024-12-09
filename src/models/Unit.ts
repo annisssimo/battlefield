@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
 import UnitState from './UnitState';
+import { TeamNames } from '../types/types';
 
 abstract class Unit {
   id: string;
@@ -9,7 +10,7 @@ abstract class Unit {
   damage: number;
   initiative: number;
   image: string;
-  team: 'red' | 'orange';
+  team: TeamNames;
   teamIndex: number;
   state: UnitState;
 
@@ -19,7 +20,7 @@ abstract class Unit {
     damage: number,
     initiative: number,
     image: string,
-    team: 'red' | 'orange',
+    team: TeamNames,
     teamIndex: number
   ) {
     this.id = uuidv4();

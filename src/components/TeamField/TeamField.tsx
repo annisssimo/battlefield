@@ -1,6 +1,7 @@
 import GameUnitCard from '../GameUnitCard/GameUnitCard';
 import Unit from '../../models/Unit';
 import * as style from './TeamField.css';
+import { TeamNames } from '../../types/types';
 
 const TeamField = ({
   team,
@@ -27,7 +28,7 @@ export default TeamField;
 
 interface TeamFieldProps {
   team: Unit[];
-  color: 'red' | 'orange';
+  color: TeamNames;
   highlightedUnit: Unit | null;
   currentUnitId: string | null;
 }
