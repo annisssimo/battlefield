@@ -1,4 +1,7 @@
+import { useState } from 'react';
+import { GiSlashedShield } from 'react-icons/gi';
 import { FaHeart } from 'react-icons/fa';
+
 import Unit from '../../models/Unit';
 import * as style from './GameUnitCard.css';
 import { TeamNames } from '../../types/types';
@@ -9,8 +12,9 @@ const GameUnitCard = ({
   highlightedUnit,
   isCurrent,
 }: GameUnitCardProps) => {
+  const [isDefending, setIsDefending] = useState(unit.state.isDefending);
+
   const unitClass = style.unitState({
-    isDefending: unit.state.isDefending,
     isHighlighted: highlightedUnit?.id === unit.id,
     isPossibleTarget: unit.state.isPossibleTarget,
     isCurrent,
@@ -18,9 +22,8 @@ const GameUnitCard = ({
   });
 
   const handleDefending = (): void => {
-    unit.setDefending(true);
-    console.log('defend!');
-    console.log(unit);
+    setIsDefending((prev) => !prev);
+    unit.state.setDefending(true);
   };
 
   return (
@@ -33,7 +36,7 @@ const GameUnitCard = ({
         <img src={unit.image} alt={unit.name} className={style.unitImage} />
         <figcaption className={style.unitCaption}>
           <div className={style.hp}>
-            <FaHeart className={style.heartIcon} />
+            <FaHeart className={style.heartIcon({ isDefending })} />
             <span className={style.healthPoints}>{unit.healthPoints}</span>
           </div>
           <b>{unit.name}</b>
@@ -41,9 +44,12 @@ const GameUnitCard = ({
           <span>Damage: {unit.damage}</span>
           <br />
           {isCurrent && (
-            <button className={style.defendButton} onClick={handleDefending}>
-              Defend
-            </button>
+            <GiSlashedShield
+              className={style.defendButton({
+                isDefending,
+              })}
+              onClick={handleDefending}
+            />
           )}
         </figcaption>
       </figure>

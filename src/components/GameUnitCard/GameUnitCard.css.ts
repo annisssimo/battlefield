@@ -12,13 +12,6 @@ export const unitState = recipe({
       'background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
   },
   variants: {
-    isDefending: {
-      true: {
-        backgroundColor: 'lightblue',
-        border: '2px solid blue',
-      },
-      false: {},
-    },
     isHighlighted: {
       true: {
         boxShadow: '0 0 15px 5px rgba(255, 215, 0, 0.9)',
@@ -73,9 +66,19 @@ export const hp = style({
   position: 'relative',
 });
 
-export const heartIcon = style({
-  color: '#db0000',
-  fontSize: '24px',
+export const heartIcon = recipe({
+  base: {
+    color: '#db0000',
+    fontSize: '24px',
+  },
+  variants: {
+    isDefending: {
+      true: {
+        color: '#007bff',
+      },
+      false: {},
+    },
+  },
 });
 
 export const healthPoints = style({
@@ -86,27 +89,23 @@ export const healthPoints = style({
   fontSize: '12px',
 });
 
-export const defendButton = style({
-  padding: '10px 15px',
-  fontSize: '14px',
-  fontWeight: 'bold',
-  color: '#fff',
-  backgroundColor: '#007bff',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-  transition: 'background-color 0.3s ease, transform 0.2s ease',
-
-  selectors: {
-    '&:hover': {
-      backgroundColor: '#0056b3',
+export const defendButton = recipe({
+  base: {
+    fontSize: '24px',
+    fontWeight: 'bold',
+    color: 'gray',
+    cursor: 'pointer',
+    transition: 'background-color 0.3s ease, transform 0.2s ease',
+    ':hover': {
+      color: '#007bff',
     },
-    '&:active': {
-      transform: 'scale(0.95)',
-    },
-    '&:disabled': {
-      backgroundColor: '#6c757d',
-      cursor: 'not-allowed',
+  },
+  variants: {
+    isDefending: {
+      true: {
+        color: '#007bff',
+      },
+      false: {},
     },
   },
 });
