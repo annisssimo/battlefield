@@ -1,12 +1,14 @@
 import Unit from '../models/Unit';
-import { TeamNames } from '../types/types';
+import AttackRangeCalculator from '../services/AttackRangeCalculator';
+import { AllUnits } from '../types/types';
 import ActionStrategy from './ActionStrategy';
+import BaseStrategy from './BaseStrategy';
 
-class MeleeAttackStrategy implements ActionStrategy {
-  highlightTargets(attacker: Unit, allUnits: { red: Unit[]; orange: Unit[] }) {
+class MeleeAttackStrategy extends BaseStrategy implements ActionStrategy {
+  highlightTargets(attacker: Unit, allUnits: AllUnits) {
     const enemyTeam = this.getEnemyTeam(attacker, allUnits);
 
-    const allowedIndices = this.calculateAllowedIndices(
+    const allowedIndices = AttackRangeCalculator.calculateMeleeRange(
       attacker.teamIndex,
       attacker.team,
       enemyTeam
@@ -23,49 +25,13 @@ class MeleeAttackStrategy implements ActionStrategy {
     });
   }
 
-  executeAction(
-    attacker: Unit,
-    target: Unit,
-    allUnits: { red: Unit[]; orange: Unit[] }
-  ): void {
+  executeAction(attacker: Unit, allUnits: AllUnits, target: Unit): void {
     const enemyTeam = this.getEnemyTeam(attacker, allUnits);
 
     console.log(enemyTeam);
 
     console.log(`${attacker.name} attacks ${target.name}!`);
     target.takeDamage(attacker.damage);
-  }
-
-  private getEnemyTeam(
-    attacker: Unit,
-    allUnits: { red: Unit[]; orange: Unit[] }
-  ) {
-    return attacker.team === 'red' ? allUnits.orange : allUnits.red;
-  }
-
-  private calculateAllowedIndices(
-    attackerIndex: number,
-    attackerTeam: TeamNames,
-    enemyTeam: Unit[]
-  ): number[] {
-    console.log(attackerIndex);
-    console.log(attackerTeam);
-    console.log(enemyTeam);
-
-    const ranges: Record<TeamNames, Record<number, number[]>> = {
-      red: {
-        3: [0, 1],
-        4: [0, 1, 2],
-        5: [1, 2],
-      },
-      orange: {
-        0: [3, 4],
-        1: [3, 4, 5],
-        2: [4, 5],
-      },
-    };
-
-    return ranges[attackerTeam][attackerIndex] || [];
   }
 }
 

@@ -34,6 +34,10 @@ abstract class Unit {
     this.state = new UnitState();
   }
 
+  isAlive(): boolean {
+    return this.healthPoints > 0;
+  }
+
   takeDamage(amount: number) {
     this.healthPoints -= this.state.isDefending ? amount / 2 : amount;
     if (this.healthPoints < 0) this.healthPoints = 0;
@@ -41,14 +45,6 @@ abstract class Unit {
 
   heal(amount: number) {
     this.healthPoints += amount;
-  }
-
-  setDefending(state: boolean) {
-    this.state.isDefending = state;
-  }
-
-  setParalyzed(state: boolean) {
-    this.state.isParalyzed = state;
   }
 
   abstract canAttack(target: Unit): boolean;

@@ -1,4 +1,5 @@
 import Unit from '../models/Unit';
+import { AllUnits } from '../types/types';
 import ActionStrategy from './ActionStrategy';
 
 class StrategyContext {
@@ -12,13 +13,9 @@ class StrategyContext {
     this.actionStrategy = actionStrategy;
   }
 
-  public attack(
-    attacker: Unit,
-    target: Unit | undefined,
-    allUnits: { red: Unit[]; orange: Unit[] }
-  ): void {
+  public attack(attacker: Unit, allUnits: AllUnits, target?: Unit): void {
     console.log(`Executing action for ${attacker.name}`);
-    this.actionStrategy.executeAction(attacker, target, allUnits);
+    this.actionStrategy.executeAction(attacker, allUnits, target);
   }
 }
 
