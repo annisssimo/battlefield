@@ -15,6 +15,7 @@ const GameUnitCard = ({
   onEndTurn,
   generalAttackerActionType,
   isHoveringTargets,
+  onUnitClick,
 }: GameUnitCardProps) => {
   const [isDefending, setIsDefending] = useState(unit.state.isDefending);
   const [isHovered, setIsHovered] = useState(false);
@@ -37,6 +38,7 @@ const GameUnitCard = ({
       className={unitClass}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={onUnitClick}
     >
       {unit.state.isPossibleTarget && (isHovered || isHoveringTargets) && (
         <ActionIcon
@@ -78,4 +80,5 @@ interface GameUnitCardProps {
   onEndTurn: () => void;
   generalAttackerActionType: string | null;
   isHoveringTargets: boolean;
+  onUnitClick: () => void;
 }

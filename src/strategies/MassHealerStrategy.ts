@@ -15,7 +15,7 @@ class MassHealerStrategy extends BaseStrategy implements ActionStrategy {
 
     myTeam.forEach((unit) => {
       if (unit.isAlive()) {
-        unit.heal(attacker.healAmount);
+        unit.takeHealing(attacker.healAmount);
       }
     });
   }

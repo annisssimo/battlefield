@@ -43,7 +43,7 @@ abstract class Unit {
     if (this.healthPoints < 0) this.healthPoints = 0;
   }
 
-  heal(amount: number) {
+  takeHealing(amount: number) {
     this.healthPoints += amount;
   }
 

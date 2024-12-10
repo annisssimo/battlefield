@@ -16,7 +16,7 @@ class SingleHealerStrategy extends BaseStrategy implements ActionStrategy {
     target?: Unit
   ): void {
     if (target && target.isAlive()) {
-      target.heal(attacker.healAmount);
+      target.takeHealing(attacker.healAmount);
     }
   }
 }

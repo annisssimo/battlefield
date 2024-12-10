@@ -52,9 +52,22 @@ const Battlefield = () => {
   const nextTurn = () => {
     if (!currentUnit) return;
 
+    Object.values(teams).forEach((team) => {
+      team.forEach((unit) => {
+        unit.state.setPossibleTarget(false);
+      });
+    });
+
     const nextUnitIndex =
       (sortedUnits.indexOf(currentUnit) + 1) % sortedUnits.length;
-    setCurrentUnit(sortedUnits[nextUnitIndex]);
+    const nextUnit = sortedUnits[nextUnitIndex];
+
+    setCurrentUnit(nextUnit);
+
+    const strategy = StrategyFactory.createStrategy(nextUnit.getActionType());
+    strategy.highlightTargets(nextUnit, teams);
+
+    setHighlightedUnit(nextUnit);
   };
 
   return (
@@ -66,6 +79,7 @@ const Battlefield = () => {
           highlightedUnit={highlightedUnit}
           currentUnitId={currentUnit?.id || ''}
           onEndTurn={nextTurn}
+          allUnits={teams}
         />
         <h2>VS</h2>
         <TeamField
@@ -74,6 +88,7 @@ const Battlefield = () => {
           highlightedUnit={highlightedUnit}
           currentUnitId={currentUnit?.id || ''}
           onEndTurn={nextTurn}
+          allUnits={teams}
         />
       </div>
       <RoundInfo
