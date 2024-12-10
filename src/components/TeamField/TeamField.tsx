@@ -4,6 +4,7 @@ import * as style from './TeamField.css';
 import { GeneralActionType, TeamNames } from '../../types/types';
 import { mapToGeneralActionType } from '../../utils/actionMapper';
 import { useCurrentUnit } from '../../hooks/useCurrentUnit';
+import { useState } from 'react';
 
 const TeamField = ({
   team,
@@ -13,9 +14,32 @@ const TeamField = ({
   onEndTurn,
 }: TeamFieldProps) => {
   const { currentUnit } = useCurrentUnit();
+  const [isHoveringTargets, setIsHoveringTargets] = useState(false);
+
+  const attackerActionType = currentUnit?.getActionType();
+  const generalAttackerActionType = currentUnit
+    ? (mapToGeneralActionType(currentUnit.getActionType()) as GeneralActionType)
+    : null;
+
+  const handleMouseEnter = () => {
+    if (
+      attackerActionType === 'mageAttack' ||
+      attackerActionType === 'healMass'
+    ) {
+      setIsHoveringTargets(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setIsHoveringTargets(false);
+  };
 
   return (
-    <div className={style.teamContainer}>
+    <div
+      className={style.teamContainer}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       {team.map((unit) => (
         <GameUnitCard
           key={unit.id}
@@ -24,13 +48,8 @@ const TeamField = ({
           highlightedUnit={highlightedUnit}
           isCurrent={unit.id === currentUnitId}
           onEndTurn={onEndTurn}
-          attackerActionType={
-            currentUnit
-              ? (mapToGeneralActionType(
-                  currentUnit.getActionType()
-                ) as GeneralActionType)
-              : null
-          }
+          generalAttackerActionType={generalAttackerActionType}
+          isHoveringTargets={isHoveringTargets}
         />
       ))}
     </div>

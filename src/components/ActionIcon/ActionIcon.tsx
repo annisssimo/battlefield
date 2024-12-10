@@ -4,9 +4,7 @@ import { MdHealthAndSafety } from 'react-icons/md';
 import * as style from './ActionIcon.css';
 import { GeneralActionType } from '../../types/types';
 
-const ActionIcon = ({ showActionIcon, actionType }: ActionIconProps) => {
-  if (!showActionIcon) return null;
-
+const ActionIcon = ({ actionType }: ActionIconProps) => {
   switch (actionType) {
     case 'attack':
       return <GiCrossedSwords className={style.actionIcon} />;
@@ -22,6 +20,5 @@ const ActionIcon = ({ showActionIcon, actionType }: ActionIconProps) => {
 export default ActionIcon;
 
 interface ActionIconProps {
-  showActionIcon: boolean;
   actionType: GeneralActionType;
 }

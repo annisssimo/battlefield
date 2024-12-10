@@ -13,7 +13,8 @@ const GameUnitCard = ({
   highlightedUnit,
   isCurrent,
   onEndTurn,
-  attackerActionType,
+  generalAttackerActionType,
+  isHoveringTargets,
 }: GameUnitCardProps) => {
   const [isDefending, setIsDefending] = useState(unit.state.isDefending);
   const [isHovered, setIsHovered] = useState(false);
@@ -37,13 +38,12 @@ const GameUnitCard = ({
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {unit.state.isPossibleTarget && (isHovered || isHoveringTargets) && (
+        <ActionIcon
+          actionType={generalAttackerActionType as GeneralActionType}
+        />
+      )}
       <figure className={style.unitFigure}>
-        {unit.state.isPossibleTarget && (
-          <ActionIcon
-            showActionIcon={isHovered}
-            actionType={attackerActionType as GeneralActionType}
-          />
-        )}
         <img src={unit.image} alt={unit.name} className={style.unitImage} />
         <figcaption className={style.unitCaption}>
           <div className={style.hp}>
@@ -76,5 +76,6 @@ interface GameUnitCardProps {
   isCurrent: boolean;
   color: TeamNames;
   onEndTurn: () => void;
-  attackerActionType: string | null;
+  generalAttackerActionType: string | null;
+  isHoveringTargets: boolean;
 }
