@@ -91,6 +91,10 @@ const Battlefield = () => {
 
       if (completedRound) {
         setRoundNumber((prev) => prev + 1);
+
+        Object.values(teams).forEach((team) =>
+          team.forEach((unit) => unit.state.setDefending(false))
+        );
       }
     } else {
       console.warn('No alive units left');

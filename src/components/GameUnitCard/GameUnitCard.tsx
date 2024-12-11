@@ -17,7 +17,6 @@ const GameUnitCard = ({
   isHoveringTargets,
   onUnitClick,
 }: GameUnitCardProps) => {
-  const [isDefending, setIsDefending] = useState(unit.state.isDefending);
   const [isHovered, setIsHovered] = useState(false);
 
   const unitClass = style.unitState({
@@ -30,7 +29,7 @@ const GameUnitCard = ({
   });
 
   const handleDefending = (): void => {
-    setIsDefending((prev) => !prev);
+    unit.state.setDefending(!unit.state.isDefending);
     unit.state.setDefending(true);
     if (onEndTurn) onEndTurn();
   };
@@ -53,7 +52,11 @@ const GameUnitCard = ({
         <img src={unit.image} alt={unit.name} className={style.unitImage} />
         <figcaption className={style.unitCaption}>
           <div className={style.hp}>
-            <FaHeart className={style.heartIcon({ isDefending })} />
+            <FaHeart
+              className={style.heartIcon({
+                isDefending: unit.state.isDefending,
+              })}
+            />
             <span className={style.healthPoints}>{unit.healthPoints}</span>
           </div>
           <b>{unit.name}</b>
@@ -63,7 +66,7 @@ const GameUnitCard = ({
           {isCurrent && (
             <GiSlashedShield
               className={style.defendButton({
-                isDefending,
+                isDefending: unit.state.isDefending,
               })}
               onClick={handleDefending}
             />
