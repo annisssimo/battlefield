@@ -117,3 +117,8 @@ export const defendButton = recipe({
     },
   },
 });
+
+export const paralyzedIcon = style({
+  fontSize: '24px',
+  color: 'purple',
+});

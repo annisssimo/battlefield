@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { GiSlashedShield } from 'react-icons/gi';
+import { GiPotionBall, GiSlashedShield } from 'react-icons/gi';
 import { FaHeart } from 'react-icons/fa';
 
 import Unit from '../../models/Unit';
@@ -70,6 +70,9 @@ const GameUnitCard = ({
               })}
               onClick={handleDefending}
             />
+          )}
+          {unit.state.isParalyzed && (
+            <GiPotionBall title="Paralyzed" className={style.paralyzedIcon} />
           )}
         </figcaption>
       </figure>

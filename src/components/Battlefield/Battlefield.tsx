@@ -81,6 +81,13 @@ const Battlefield = () => {
 
     const nextUnit = sortedUnits[nextUnitIndex];
 
+    if (nextUnit.state.isParalyzed) {
+      console.log(`${nextUnit.name} пропустил ход из-за паралича.`);
+      nextUnit.state.setParalyzed(false);
+      nextTurn(nextUnitIndex);
+      return;
+    }
+
     if (nextUnit.isAlive()) {
       setCurrentUnit(nextUnit);
 
