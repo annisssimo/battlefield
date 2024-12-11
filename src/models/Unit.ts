@@ -47,7 +47,6 @@ abstract class Unit {
     this.healthPoints += amount;
   }
 
-  abstract canAttack(target: Unit): boolean;
   abstract getActionType(): ActionType;
 }
 

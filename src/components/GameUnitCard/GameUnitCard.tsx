@@ -23,6 +23,8 @@ const GameUnitCard = ({
   const unitClass = style.unitState({
     isHighlighted: highlightedUnit?.id === unit.id,
     isPossibleTarget: unit.state.isPossibleTarget,
+    isDead: !unit.isAlive(),
+    isDying: unit.healthPoints > 0 && unit.healthPoints <= 15,
     isCurrent,
     color,
   });
@@ -40,11 +42,13 @@ const GameUnitCard = ({
       onMouseLeave={() => setIsHovered(false)}
       onClick={onUnitClick}
     >
-      {unit.state.isPossibleTarget && (isHovered || isHoveringTargets) && (
-        <ActionIcon
-          actionType={generalAttackerActionType as GeneralActionType}
-        />
-      )}
+      {unit.state.isPossibleTarget &&
+        (isHovered || isHoveringTargets) &&
+        unit.isAlive() && (
+          <ActionIcon
+            actionType={generalAttackerActionType as GeneralActionType}
+          />
+        )}
       <figure className={style.unitFigure}>
         <img src={unit.image} alt={unit.name} className={style.unitImage} />
         <figcaption className={style.unitCaption}>

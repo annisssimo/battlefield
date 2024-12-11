@@ -5,11 +5,6 @@ class MeleeUnit extends Unit {
   getActionType(): ActionType {
     return 'meleeAttack';
   }
-
-  canAttack(target: Unit): boolean {
-    console.log(target);
-    return true;
-  }
 }
 
 export default MeleeUnit;

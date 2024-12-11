@@ -7,11 +7,6 @@ class HealerUnitSingle extends Unit {
   getActionType(): ActionType {
     return 'healSingle';
   }
-
-  canAttack(target: Unit): boolean {
-    console.log(target);
-    return true;
-  }
 }
 
 export default HealerUnitSingle;

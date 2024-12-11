@@ -8,6 +8,7 @@ import RoundInfo from '../RoundInfo/RoundInfo';
 import StrategyFactory from '../../strategies/StrategyFactory';
 import { AllUnits } from '../../types/types';
 import { useCurrentUnit } from '../../hooks/useCurrentUnit';
+import vsImg from '../../assets/vs.png';
 
 const Battlefield = () => {
   const [teams, setTeams] = useState<AllUnits>({
@@ -37,6 +38,7 @@ const Battlefield = () => {
     if (sortedUnits.length > 0) {
       const currentUnit = sortedUnits[0];
       setCurrentUnit(currentUnit);
+
       const strategy = StrategyFactory.createStrategy(
         currentUnit.getActionType()
       );
@@ -49,8 +51,8 @@ const Battlefield = () => {
     setHighlightedUnit(unit);
   };
 
-  const nextTurn = () => {
-    if (!currentUnit) return;
+  const nextTurn = (index: number | null = null) => {
+    if (!currentUnit && index === null) return;
 
     Object.values(teams).forEach((team) => {
       team.forEach((unit) => {
@@ -58,16 +60,29 @@ const Battlefield = () => {
       });
     });
 
-    const nextUnitIndex =
-      (sortedUnits.indexOf(currentUnit) + 1) % sortedUnits.length;
+    const currentIndex =
+      index !== null
+        ? index
+        : currentUnit
+        ? sortedUnits.indexOf(currentUnit)
+        : -1;
+
+    if (currentIndex < 0) return;
+
+    const nextUnitIndex = (currentIndex + 1) % sortedUnits.length;
+
     const nextUnit = sortedUnits[nextUnitIndex];
 
-    setCurrentUnit(nextUnit);
+    if (nextUnit.isAlive()) {
+      setCurrentUnit(nextUnit);
 
-    const strategy = StrategyFactory.createStrategy(nextUnit.getActionType());
-    strategy.highlightTargets(nextUnit, teams);
+      const strategy = StrategyFactory.createStrategy(nextUnit.getActionType());
+      strategy.highlightTargets(nextUnit, teams);
 
-    setHighlightedUnit(nextUnit);
+      setHighlightedUnit(nextUnit);
+    } else {
+      nextTurn(nextUnitIndex);
+    }
   };
 
   return (
@@ -81,7 +96,7 @@ const Battlefield = () => {
           onEndTurn={nextTurn}
           allUnits={teams}
         />
-        <h2>VS</h2>
+        <img src={vsImg} alt="vs" className={style.vsImg} />
         <TeamField
           team={teams.orange}
           color="orange"

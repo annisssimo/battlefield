@@ -7,11 +7,6 @@ class HealerUnitMass extends Unit {
   getActionType(): ActionType {
     return 'healMass';
   }
-
-  canAttack(target: Unit): boolean {
-    console.log(target);
-    return true;
-  }
 }
 
 export default HealerUnitMass;

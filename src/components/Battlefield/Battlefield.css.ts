@@ -8,3 +8,7 @@ export const app = style({
 export const battlefield = style({
   margin: '20px',
 });
+
+export const vsImg = style({
+  width: '80px',
+});

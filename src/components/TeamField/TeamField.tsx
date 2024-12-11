@@ -38,7 +38,7 @@ const TeamField = ({
   };
 
   const handleUnitClick = (targetUnit: Unit) => {
-    if (!currentUnit) return;
+    if (!currentUnit || !targetUnit.state.isPossibleTarget) return;
 
     try {
       const strategy = StrategyFactory.createStrategy(

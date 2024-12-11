@@ -17,13 +17,11 @@ export const unitState = recipe({
       true: {
         boxShadow: '0 0 15px 5px rgba(255, 215, 0, 0.9)',
       },
-      false: {},
     },
     isCurrent: {
       true: {
         boxShadow: '0 0 40px lime',
       },
-      false: {},
     },
     color: {
       red: {
@@ -35,11 +33,20 @@ export const unitState = recipe({
         backgroundColor: '#ffa21f',
       },
     },
+    isDying: {
+      true: {
+        filter: 'grayscale(0.3) brightness(0.9)',
+      },
+    },
+    isDead: {
+      true: {
+        filter: 'grayscale(1) brightness(0.7)',
+      },
+    },
     isPossibleTarget: {
       true: {
         border: '3px solid red',
       },
-      false: {},
     },
   },
 });
