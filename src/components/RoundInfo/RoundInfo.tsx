@@ -7,6 +7,7 @@ const RoundInfo = ({
   units,
   onHighlightUnit,
   currentUnitIndex,
+  roundNumber,
 }: RoundInfoProps) => {
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
 
@@ -22,27 +23,36 @@ const RoundInfo = ({
 
   return (
     <div className={style.roundInfoContainer}>
-      <h3>Turn Order</h3>
+      <h3>Turn Order (round: {roundNumber})</h3>
       <ul className={style.unitList}>
-        {units.map((unit) => (
-          <li
-            key={unit.id}
-            className={`${style.unitItem.default} ${
-              highlightedUnit?.id === unit.id ? style.unitItem.highlighted : ''
-            } ${
-              units.indexOf(unit) === currentUnitIndex
-                ? style.unitItem.current
-                : ''
-            }`}
-            onMouseEnter={() => handleMouseEnter(unit)}
-            onMouseLeave={handleMouseLeave}
-          >
-            <img src={unit.image} alt={unit.name} className={style.unitImage} />
-            <span>
-              {unit.name} (Initiative: {unit.initiative})
-            </span>
-          </li>
-        ))}
+        {units.map(
+          (unit) =>
+            unit.isAlive() && (
+              <li
+                key={unit.id}
+                className={`${style.unitItem.default} ${
+                  highlightedUnit?.id === unit.id
+                    ? style.unitItem.highlighted
+                    : ''
+                } ${
+                  units.indexOf(unit) === currentUnitIndex
+                    ? style.unitItem.current
+                    : ''
+                }`}
+                onMouseEnter={() => handleMouseEnter(unit)}
+                onMouseLeave={handleMouseLeave}
+              >
+                <img
+                  src={unit.image}
+                  alt={unit.name}
+                  className={style.unitImage}
+                />
+                <span>
+                  {unit.name} <i>(initiative {unit.initiative})</i>
+                </span>
+              </li>
+            )
+        )}
       </ul>
     </div>
   );
@@ -54,4 +64,5 @@ interface RoundInfoProps {
   units: Unit[];
   onHighlightUnit: (unit: Unit | null) => void;
   currentUnitIndex: number;
+  roundNumber: number;
 }

@@ -18,6 +18,7 @@ const Battlefield = () => {
   const [sortedUnits, setSortedUnits] = useState<Unit[]>([]);
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
   const { currentUnit, setCurrentUnit } = useCurrentUnit();
+  const [roundNumber, setRoundNumber] = useState(1);
 
   useEffect(() => {
     const redTeam = generateRandomTeam('red');
@@ -54,11 +55,9 @@ const Battlefield = () => {
   const nextTurn = (index: number | null = null) => {
     if (!currentUnit && index === null) return;
 
-    Object.values(teams).forEach((team) => {
-      team.forEach((unit) => {
-        unit.state.setPossibleTarget(false);
-      });
-    });
+    Object.values(teams).forEach((team) =>
+      team.forEach((unit) => unit.state.setPossibleTarget(false))
+    );
 
     const currentIndex =
       index !== null
@@ -69,7 +68,16 @@ const Battlefield = () => {
 
     if (currentIndex < 0) return;
 
-    const nextUnitIndex = (currentIndex + 1) % sortedUnits.length;
+    let nextUnitIndex = currentIndex;
+    let completedRound = false;
+
+    do {
+      nextUnitIndex = (nextUnitIndex + 1) % sortedUnits.length;
+      if (nextUnitIndex === 0) completedRound = true;
+    } while (
+      !sortedUnits[nextUnitIndex].isAlive() &&
+      nextUnitIndex !== currentIndex
+    );
 
     const nextUnit = sortedUnits[nextUnitIndex];
 
@@ -80,8 +88,12 @@ const Battlefield = () => {
       strategy.highlightTargets(nextUnit, teams);
 
       setHighlightedUnit(nextUnit);
+
+      if (completedRound) {
+        setRoundNumber((prev) => prev + 1);
+      }
     } else {
-      nextTurn(nextUnitIndex);
+      console.warn('No alive units left');
     }
   };
 
@@ -110,6 +122,7 @@ const Battlefield = () => {
         units={sortedUnits}
         onHighlightUnit={handleHighlightUnit}
         currentUnitIndex={sortedUnits.indexOf(currentUnit!)}
+        roundNumber={roundNumber}
       />
     </div>
   );
