@@ -15,7 +15,7 @@ class RangeAttackStrategy extends BaseStrategy implements ActionStrategy {
     HighlightService.highlightOnlyValidTargets(enemyTeam, allowedIndices);
   }
 
-  executeAction(attacker: Unit, allUnits: AllUnits, target?: Unit): void {
+  executeAction(attacker: Unit, _allUnits: AllUnits, target?: Unit): void {
     if (!target || !target.state.isPossibleTarget || !target.isAlive()) {
       LogService.log(`${attacker.name} has no valid target!`);
       return;

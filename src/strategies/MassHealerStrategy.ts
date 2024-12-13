@@ -1,6 +1,7 @@
 import HealerUnitMass from '../models/HealerUnitMass';
 import Unit from '../models/Unit';
 import HighlightService from '../services/HighlightService';
+import LogService from '../services/LogService';
 import { AllUnits } from '../types/types';
 import ActionStrategy from './ActionStrategy';
 import BaseStrategy from './BaseStrategy';
@@ -18,6 +19,8 @@ class MassHealerStrategy extends BaseStrategy implements ActionStrategy {
         unit.takeHealing(attacker.healAmount);
       }
     });
+
+    LogService.log(`${attacker.name} heals all his team`);
   }
 }
 

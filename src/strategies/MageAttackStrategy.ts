@@ -14,17 +14,13 @@ class MageAttackStrategy extends BaseStrategy implements ActionStrategy {
   executeAction(attacker: Unit, allUnits: AllUnits): void {
     const enemyTeam = attacker.team === 'red' ? allUnits.orange : allUnits.red;
 
-    LogService.log(`${attacker.name} casts a spell on all enemies!`);
-
     enemyTeam.forEach((unit) => {
       if (unit.isAlive()) {
         unit.takeDamage(attacker.damage);
-
-        LogService.log(
-          `${attacker.name} deals ${attacker.damage} damage to ${unit.name}. Remaining HP: ${unit.healthPoints}`
-        );
       }
     });
+
+    LogService.log(`${attacker.name} casts a spell on all enemies!`);
   }
 }
 

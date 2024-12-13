@@ -10,7 +10,6 @@ import { AllUnits } from '../../types/types';
 import { useCurrentUnit } from '../../hooks/useCurrentUnit';
 import vsImg from '../../assets/vs.png';
 import LogService from '../../services/LogService';
-import MessagesPanel from '../MessagesPanel/MessagesPanel';
 
 const Battlefield = () => {
   const [teams, setTeams] = useState<AllUnits>({
@@ -21,7 +20,6 @@ const Battlefield = () => {
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
   const { currentUnit, setCurrentUnit } = useCurrentUnit();
   const [roundNumber, setRoundNumber] = useState(1);
-  const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
     const redTeam = generateRandomTeam('red');
@@ -50,15 +48,6 @@ const Battlefield = () => {
       setHighlightedUnit(currentUnit);
     }
   }, [sortedUnits, teams, setCurrentUnit]);
-
-  useEffect(() => {
-    const handleLog = (message: string) => {
-      setMessages((prev) => [...prev, message]);
-    };
-
-    LogService.subscribe(handleLog);
-    return () => LogService.unsubscribe(handleLog);
-  }, []);
 
   const handleHighlightUnit = (unit: Unit | null) => {
     setHighlightedUnit(unit);
@@ -94,9 +83,12 @@ const Battlefield = () => {
     const nextUnit = sortedUnits[nextUnitIndex];
 
     if (nextUnit.state.isParalyzed) {
-      console.log(`${nextUnit.name} пропустил ход из-за паралича.`);
+      LogService.info(
+        `${nextUnit.name} skips his turn because he is paralyzed.`
+      );
       nextUnit.state.setParalyzed(false);
       nextTurn(nextUnitIndex);
+
       return;
     }
 
@@ -114,6 +106,8 @@ const Battlefield = () => {
         Object.values(teams).forEach((team) =>
           team.forEach((unit) => unit.state.setDefending(false))
         );
+
+        LogService.log(`Round ${roundNumber + 1} starts!`);
       }
     } else {
       console.warn('No alive units left');
@@ -142,8 +136,6 @@ const Battlefield = () => {
           onEndTurn={nextTurn}
           allUnits={teams}
         />
-
-        <MessagesPanel messages={messages} />
       </div>
       <RoundInfo
         units={sortedUnits}

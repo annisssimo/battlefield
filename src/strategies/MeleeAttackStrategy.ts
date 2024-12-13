@@ -1,5 +1,6 @@
 import Unit from '../models/Unit';
 import AttackRangeCalculator from '../services/AttackRangeCalculator';
+import HighlightService from '../services/HighlightService';
 import LogService from '../services/LogService';
 import { AllUnits } from '../types/types';
 import ActionStrategy from './ActionStrategy';
@@ -11,20 +12,20 @@ class MeleeAttackStrategy extends BaseStrategy implements ActionStrategy {
 
     const allowedIndices = AttackRangeCalculator.calculateMeleeRange(
       attacker.teamIndex,
-      attacker.team,
-      enemyTeam
+      attacker.team
     );
 
-    enemyTeam.forEach((unit) => unit.state.setPossibleTarget(false));
+    if (allowedIndices.length === 0) {
+      LogService.info(
+        `${attacker.name} don't have valid targets to attack. But can defend himself! Click the shield icon`
+      );
+      return;
+    }
 
-    allowedIndices.forEach((index) => {
-      if (enemyTeam[index]) {
-        enemyTeam[index].state.setPossibleTarget(true);
-      }
-    });
+    HighlightService.highlightOnlyValidTargets(enemyTeam, allowedIndices);
   }
 
-  executeAction(attacker: Unit, allUnits: AllUnits, target: Unit): void {
+  executeAction(attacker: Unit, _allUnits: AllUnits, target: Unit): void {
     target.takeDamage(attacker.damage);
 
     LogService.log(
