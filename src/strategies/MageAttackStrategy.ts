@@ -1,5 +1,6 @@
 import Unit from '../models/Unit';
 import HighlightService from '../services/HighlightService';
+import LogService from '../services/LogService';
 import { AllUnits } from '../types/types';
 import ActionStrategy from './ActionStrategy';
 import BaseStrategy from './BaseStrategy';
@@ -13,12 +14,13 @@ class MageAttackStrategy extends BaseStrategy implements ActionStrategy {
   executeAction(attacker: Unit, allUnits: AllUnits): void {
     const enemyTeam = attacker.team === 'red' ? allUnits.orange : allUnits.red;
 
-    console.log(`${attacker.name} casts a spell on all enemies!`);
+    LogService.log(`${attacker.name} casts a spell on all enemies!`);
 
     enemyTeam.forEach((unit) => {
       if (unit.isAlive()) {
         unit.takeDamage(attacker.damage);
-        console.log(
+
+        LogService.log(
           `${attacker.name} deals ${attacker.damage} damage to ${unit.name}. Remaining HP: ${unit.healthPoints}`
         );
       }

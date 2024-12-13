@@ -47,8 +47,6 @@ const TeamField = ({
       const strategyContext = new StrategyContext(strategy);
 
       strategyContext.attack(currentUnit, allUnits, targetUnit);
-
-      console.log(`Action executed: ${currentUnit.name} -> ${targetUnit.name}`);
     } catch (error) {
       console.error('Error executing action:', error);
     }

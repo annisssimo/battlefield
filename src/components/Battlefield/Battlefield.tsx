@@ -9,6 +9,8 @@ import StrategyFactory from '../../strategies/StrategyFactory';
 import { AllUnits } from '../../types/types';
 import { useCurrentUnit } from '../../hooks/useCurrentUnit';
 import vsImg from '../../assets/vs.png';
+import LogService from '../../services/LogService';
+import MessagesPanel from '../MessagesPanel/MessagesPanel';
 
 const Battlefield = () => {
   const [teams, setTeams] = useState<AllUnits>({
@@ -19,6 +21,7 @@ const Battlefield = () => {
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
   const { currentUnit, setCurrentUnit } = useCurrentUnit();
   const [roundNumber, setRoundNumber] = useState(1);
+  const [messages, setMessages] = useState<string[]>([]);
 
   useEffect(() => {
     const redTeam = generateRandomTeam('red');
@@ -47,6 +50,15 @@ const Battlefield = () => {
       setHighlightedUnit(currentUnit);
     }
   }, [sortedUnits, teams, setCurrentUnit]);
+
+  useEffect(() => {
+    const handleLog = (message: string) => {
+      setMessages((prev) => [...prev, message]);
+    };
+
+    LogService.subscribe(handleLog);
+    return () => LogService.unsubscribe(handleLog);
+  }, []);
 
   const handleHighlightUnit = (unit: Unit | null) => {
     setHighlightedUnit(unit);
@@ -119,7 +131,9 @@ const Battlefield = () => {
           onEndTurn={nextTurn}
           allUnits={teams}
         />
+
         <img src={vsImg} alt="vs" className={style.vsImg} />
+
         <TeamField
           team={teams.orange}
           color="orange"
@@ -128,6 +142,8 @@ const Battlefield = () => {
           onEndTurn={nextTurn}
           allUnits={teams}
         />
+
+        <MessagesPanel messages={messages} />
       </div>
       <RoundInfo
         units={sortedUnits}
