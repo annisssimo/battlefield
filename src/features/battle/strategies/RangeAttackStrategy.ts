@@ -17,7 +17,6 @@ class RangeAttackStrategy extends BaseStrategy implements ActionStrategy {
 
   executeAction(attacker: Unit, _allUnits: AllUnits, target?: Unit): void {
     if (!target || !target.state.isPossibleTarget || !target.isAlive()) {
-      LogService.log(`${attacker.name} has no valid target!`);
       return;
     }
 
