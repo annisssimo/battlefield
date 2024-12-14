@@ -11,7 +11,7 @@ class HighlightService {
 
   static highlightOnlyValidTargets(
     units: Unit[],
-    validIndices: number[]
+    validIndices: Set<number>
   ): void {
     this.clearHighlight(units);
     validIndices.forEach((index) => {

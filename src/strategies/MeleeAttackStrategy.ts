@@ -10,12 +10,16 @@ class MeleeAttackStrategy extends BaseStrategy implements ActionStrategy {
   highlightTargets(attacker: Unit, allUnits: AllUnits) {
     const enemyTeam = this.getEnemyTeam(attacker, allUnits);
 
+    // resets visited units before each melee hit
+    AttackRangeCalculator.visitedUnits.clear();
+
     const allowedIndices = AttackRangeCalculator.calculateMeleeRange(
-      attacker.teamIndex,
-      attacker.team
+      allUnits,
+      attacker,
+      attacker
     );
 
-    if (allowedIndices.length === 0) {
+    if (allowedIndices.size === 0) {
       LogService.info(
         `${attacker.name} don't have valid targets to attack. But can defend himself! Click the shield icon`
       );
