@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 
-import { generateRandomTeam } from '../../features/units/utils/randomTeamGenerator';
+import { TeamManager } from '../../features/battle/TeamManager';
+import { GameStateManager } from '../../features/battle/GameStateManager';
+import { WinnerChecker } from '../../features/battle/WinnerChecker';
 import Unit from '../../features/units/models/Unit';
 import TeamField from '../TeamField/TeamField';
 import * as style from './Battlefield.css';
@@ -25,18 +27,9 @@ const Battlefield = () => {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    const redTeam = generateRandomTeam('red');
-    const orangeTeam = generateRandomTeam('orange');
+    const { redTeam, orangeTeam } = TeamManager.initializeTeams();
     setTeams({ red: redTeam, orange: orangeTeam });
-
-    const allUnits = [...redTeam, ...orangeTeam].sort((a, b) => {
-      if (a.initiative === b.initiative) {
-        return Math.random() - 0.5;
-      }
-      return b.initiative - a.initiative;
-    });
-
-    setSortedUnits(allUnits);
+    setSortedUnits(TeamManager.sortUnitsByInitiative(redTeam, orangeTeam));
     setIsInitialized(true);
   }, []);
 
@@ -53,27 +46,10 @@ const Battlefield = () => {
     }
   }, [sortedUnits, teams, setCurrentUnit]);
 
-  const handleHighlightUnit = (unit: Unit | null) => {
-    setHighlightedUnit(unit);
-  };
-
-  const checkForWinner = () => {
-    const redAlive = teams.red.some((unit) => unit.isAlive());
-    const orangeAlive = teams.orange.some((unit) => unit.isAlive());
-
-    if (!redAlive) return 'Orange';
-    if (!orangeAlive) return 'Red';
-    return null;
-  };
-
   const restartGame = () => {
-    const redTeam = generateRandomTeam('red');
-    const orangeTeam = generateRandomTeam('orange');
-
+    const { redTeam, orangeTeam } = TeamManager.initializeTeams();
     setTeams({ red: redTeam, orange: orangeTeam });
-    setSortedUnits(
-      [...redTeam, ...orangeTeam].sort((a, b) => b.initiative - a.initiative)
-    );
+    setSortedUnits(TeamManager.sortUnitsByInitiative(redTeam, orangeTeam));
     setRoundNumber(1);
     setWinner(null);
     setHighlightedUnit(null);
@@ -82,12 +58,16 @@ const Battlefield = () => {
 
   useEffect(() => {
     if (isInitialized) {
-      const winner = checkForWinner();
+      const winner = WinnerChecker.checkForWinner(teams);
       if (winner) {
         setWinner(winner);
       }
     }
-  }, [checkForWinner, isInitialized, teams]);
+  }, [isInitialized, teams, [...Object.values(teams)]]);
+
+  const handleHighlightUnit = (unit: Unit | null) => {
+    setHighlightedUnit(unit);
+  };
 
   const nextTurn = (index: number | null = null) => {
     if (!currentUnit && index === null) return;
@@ -105,26 +85,13 @@ const Battlefield = () => {
 
     if (currentIndex < 0) return;
 
-    let nextUnitIndex = currentIndex;
-    let completedRound = false;
-
-    do {
-      nextUnitIndex = (nextUnitIndex + 1) % sortedUnits.length;
-      if (nextUnitIndex === 0) completedRound = true;
-    } while (
-      !sortedUnits[nextUnitIndex].isAlive() &&
-      nextUnitIndex !== currentIndex
+    const nextUnit = GameStateManager.findNextAliveUnit(
+      sortedUnits,
+      currentIndex
     );
 
-    const nextUnit = sortedUnits[nextUnitIndex];
-
-    if (nextUnit.state.isParalyzed) {
-      LogService.info(
-        `${nextUnit.name} skips his turn because he is paralyzed.`
-      );
-      nextUnit.state.setParalyzed(false);
-      nextTurn(nextUnitIndex);
-
+    if (GameStateManager.skipParalyzedUnit(nextUnit)) {
+      nextTurn(sortedUnits.indexOf(nextUnit));
       return;
     }
 
@@ -136,7 +103,7 @@ const Battlefield = () => {
 
       setHighlightedUnit(nextUnit);
 
-      if (completedRound) {
+      if (currentIndex > sortedUnits.indexOf(nextUnit)) {
         setRoundNumber((prev) => prev + 1);
 
         Object.values(teams).forEach((team) =>
