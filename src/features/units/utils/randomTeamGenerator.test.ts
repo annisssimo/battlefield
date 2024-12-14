@@ -3,7 +3,7 @@ import { UnitName } from '../enums/unit.enums';
 import { TeamNames } from '../../../shared/types/types';
 import { UnitFactory } from './UnitFactory';
 
-jest.mock('../models/UnitFactory', () => ({
+jest.mock('./UnitFactory', () => ({
   UnitFactory: jest.fn((name, team, index) => ({
     id: `${name}-${team}-${index}`,
     name,
