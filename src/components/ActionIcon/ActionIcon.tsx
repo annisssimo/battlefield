@@ -2,7 +2,7 @@ import { GiCrossedSwords, GiPotionBall } from 'react-icons/gi';
 import { MdHealthAndSafety } from 'react-icons/md';
 
 import * as style from './ActionIcon.css';
-import { GeneralActionType } from '../../types/types';
+import { GeneralActionType } from '../../shared/types/types';
 
 const ActionIcon = ({ actionType }: ActionIconProps) => {
   switch (actionType) {

@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 
-import { generateRandomTeam } from '../../utils/randomTeamGenerator';
-import Unit from '../../models/Unit';
+import { generateRandomTeam } from '../../features/units/utils/randomTeamGenerator';
+import Unit from '../../features/units/models/Unit';
 import TeamField from '../TeamField/TeamField';
 import * as style from './Battlefield.css';
 import RoundInfo from '../RoundInfo/RoundInfo';
-import StrategyFactory from '../../strategies/StrategyFactory';
-import { AllUnits } from '../../types/types';
-import { useCurrentUnit } from '../../hooks/useCurrentUnit';
+import StrategyFactory from '../../features/battle/strategies/StrategyFactory';
 import vsImg from '../../assets/vs.png';
-import LogService from '../../services/LogService';
+import { AllUnits } from '../../shared/types/types';
+import LogService from '../../features/units/services/LogService';
+import { useCurrentUnit } from '../../shared/hooks/useCurrentUnit';
 
 const Battlefield = () => {
   const [teams, setTeams] = useState<AllUnits>({

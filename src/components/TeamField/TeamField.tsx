@@ -1,12 +1,12 @@
 import GameUnitCard from '../GameUnitCard/GameUnitCard';
-import Unit from '../../models/Unit';
+import Unit from '../../features/units/models/Unit';
 import * as style from './TeamField.css';
-import { GeneralActionType, TeamNames, AllUnits } from '../../types/types';
-import { mapToGeneralActionType } from '../../utils/actionMapper';
-import { useCurrentUnit } from '../../hooks/useCurrentUnit';
+import { mapToGeneralActionType } from '../../shared/utils/actionMapper';
+import { useCurrentUnit } from '../../shared/hooks/useCurrentUnit';
 import { useState } from 'react';
-import StrategyFactory from '../../strategies/StrategyFactory';
-import StrategyContext from '../../strategies/StrategyContext';
+import StrategyFactory from '../../features/battle/strategies/StrategyFactory';
+import StrategyContext from '../../features/battle/strategies/StrategyContext';
+import { GeneralActionType, TeamNames, AllUnits } from '../../shared/types/types';
 
 const TeamField = ({
   team,

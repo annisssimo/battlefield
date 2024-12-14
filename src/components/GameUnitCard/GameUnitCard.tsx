@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { GiPotionBall, GiSlashedShield } from 'react-icons/gi';
 import { FaHeart } from 'react-icons/fa';
 
-import Unit from '../../models/Unit';
+import Unit from '../../features/units/models/Unit';
 import * as style from './GameUnitCard.css';
-import { GeneralActionType, TeamNames } from '../../types/types';
 import ActionIcon from '../ActionIcon/ActionIcon';
+import { GeneralActionType, TeamNames } from '../../shared/types/types';
 
 const GameUnitCard = ({
   unit,

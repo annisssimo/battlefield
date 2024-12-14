@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import Unit from '../../models/Unit';
+import Unit from '../../features/units/models/Unit';
 import * as style from './RoundInfo.css';
 
 const RoundInfo = ({
