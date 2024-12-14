@@ -10,6 +10,7 @@ import vsImg from '../../assets/vs.png';
 import { AllUnits } from '../../shared/types/types';
 import LogService from '../../features/units/services/LogService';
 import { useCurrentUnit } from '../../shared/hooks/useCurrentUnit';
+import Modal from '../Modal/Modal';
 
 const Battlefield = () => {
   const [teams, setTeams] = useState<AllUnits>({
@@ -20,6 +21,8 @@ const Battlefield = () => {
   const [highlightedUnit, setHighlightedUnit] = useState<Unit | null>(null);
   const { currentUnit, setCurrentUnit } = useCurrentUnit();
   const [roundNumber, setRoundNumber] = useState(1);
+  const [winner, setWinner] = useState<string | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const redTeam = generateRandomTeam('red');
@@ -34,6 +37,7 @@ const Battlefield = () => {
     });
 
     setSortedUnits(allUnits);
+    setIsInitialized(true);
   }, []);
 
   useEffect(() => {
@@ -52,6 +56,38 @@ const Battlefield = () => {
   const handleHighlightUnit = (unit: Unit | null) => {
     setHighlightedUnit(unit);
   };
+
+  const checkForWinner = () => {
+    const redAlive = teams.red.some((unit) => unit.isAlive());
+    const orangeAlive = teams.orange.some((unit) => unit.isAlive());
+
+    if (!redAlive) return 'Orange';
+    if (!orangeAlive) return 'Red';
+    return null;
+  };
+
+  const restartGame = () => {
+    const redTeam = generateRandomTeam('red');
+    const orangeTeam = generateRandomTeam('orange');
+
+    setTeams({ red: redTeam, orange: orangeTeam });
+    setSortedUnits(
+      [...redTeam, ...orangeTeam].sort((a, b) => b.initiative - a.initiative)
+    );
+    setRoundNumber(1);
+    setWinner(null);
+    setHighlightedUnit(null);
+    setCurrentUnit(null);
+  };
+
+  useEffect(() => {
+    if (isInitialized) {
+      const winner = checkForWinner();
+      if (winner) {
+        setWinner(winner);
+      }
+    }
+  }, [checkForWinner, isInitialized, teams]);
 
   const nextTurn = (index: number | null = null) => {
     if (!currentUnit && index === null) return;
@@ -143,6 +179,7 @@ const Battlefield = () => {
         currentUnitIndex={sortedUnits.indexOf(currentUnit!)}
         roundNumber={roundNumber}
       />
+      {winner && <Modal winner={winner} onRestart={restartGame} />}
     </div>
   );
 };
