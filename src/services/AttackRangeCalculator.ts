@@ -96,11 +96,16 @@ class AttackRangeCalculator {
    * @param enemyTeam - array of units belonging to the enemy team
    * @returns an array of indices representing all alive units in the enemy team
    */
-  static calculateMassAttack(enemyTeam: Unit[]): number[] {
-    return enemyTeam.reduce<number[]>((indices, unit, index) => {
-      if (unit.isAlive()) indices.push(index);
-      return indices;
-    }, []);
+  static calculateMassAttack(enemyTeam: Unit[]): Set<number> {
+    const aliveIndices = new Set<number>();
+
+    enemyTeam.forEach((unit, index) => {
+      if (unit.isAlive()) {
+        aliveIndices.add(index);
+      }
+    });
+
+    return aliveIndices;
   }
 }
 

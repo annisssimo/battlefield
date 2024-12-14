@@ -13,6 +13,7 @@ class MeleeAttackStrategy extends BaseStrategy implements ActionStrategy {
     // resets visited units before each melee hit
     AttackRangeCalculator.visitedUnits.clear();
 
+    // get allowed indices for attack based on the attacker's position and state
     const allowedIndices = AttackRangeCalculator.calculateMeleeRange(
       allUnits,
       attacker,

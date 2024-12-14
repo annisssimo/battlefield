@@ -6,10 +6,7 @@ interface ActionStrategy {
 
   executeAction(
     attacker: Unit,
-    allUnits: {
-      red: Unit[];
-      orange: Unit[];
-    },
+    allUnits: AllUnits,
     target?: Unit | Unit[] | undefined
   ): void;
 }
