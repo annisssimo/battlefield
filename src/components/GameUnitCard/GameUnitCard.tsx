@@ -14,7 +14,6 @@ const GameUnitCard = ({
   isCurrent,
   onEndTurn,
   generalAttackerActionType,
-  isHoveringTargets,
   onUnitClick,
   isMassAttack,
 }: GameUnitCardProps) => {
@@ -43,7 +42,7 @@ const GameUnitCard = ({
       onClick={onUnitClick}
     >
       {unit.state.isPossibleTarget &&
-        (isHovered || isHoveringTargets || isMassAttack) &&
+        (isHovered || isMassAttack) &&
         unit.isAlive() && (
           <ActionIcon
             actionType={generalAttackerActionType as GeneralActionType}
@@ -90,7 +89,6 @@ interface GameUnitCardProps {
   color: TeamNames;
   onEndTurn: () => void;
   generalAttackerActionType: string | null;
-  isHoveringTargets: boolean;
   onUnitClick: () => void;
   isMassAttack: boolean;
 }

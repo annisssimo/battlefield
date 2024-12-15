@@ -3,7 +3,6 @@ import Unit from '../../features/units/models/Unit';
 import * as style from './TeamField.css';
 import { mapToGeneralActionType } from '../../shared/utils/actionMapper';
 import { useCurrentUnit } from '../../shared/hooks/useCurrentUnit';
-import { useState } from 'react';
 import StrategyFactory from '../../features/battle/strategies/StrategyFactory';
 import StrategyContext from '../../features/battle/strategies/StrategyContext';
 import {
@@ -22,25 +21,10 @@ const TeamField = ({
   isMassAttack,
 }: TeamFieldProps) => {
   const { currentUnit } = useCurrentUnit();
-  const [isHoveringTargets, setIsHoveringTargets] = useState(false);
 
-  const attackerActionType = currentUnit?.getActionType();
   const generalAttackerActionType = currentUnit
     ? (mapToGeneralActionType(currentUnit.getActionType()) as GeneralActionType)
     : null;
-
-  const handleMouseEnter = () => {
-    if (
-      attackerActionType === 'mageAttack' ||
-      attackerActionType === 'healMass'
-    ) {
-      setIsHoveringTargets(true);
-    }
-  };
-
-  const handleMouseLeave = () => {
-    setIsHoveringTargets(false);
-  };
 
   const handleUnitClick = (targetUnit: Unit) => {
     if (!currentUnit || !targetUnit.state.isPossibleTarget) return;
@@ -60,11 +44,7 @@ const TeamField = ({
   };
 
   return (
-    <div
-      className={style.teamContainer}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
+    <div className={style.teamContainer}>
       {team.map((unit) => (
         <GameUnitCard
           key={unit.id}
@@ -74,7 +54,6 @@ const TeamField = ({
           isCurrent={unit.id === currentUnitId}
           onEndTurn={onEndTurn}
           generalAttackerActionType={generalAttackerActionType}
-          isHoveringTargets={isHoveringTargets}
           onUnitClick={() => handleUnitClick(unit)}
           isMassAttack={isMassAttack}
         />
