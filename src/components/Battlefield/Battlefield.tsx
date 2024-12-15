@@ -25,6 +25,7 @@ const Battlefield = () => {
   const [roundNumber, setRoundNumber] = useState(1);
   const [winner, setWinner] = useState<string | null>(null);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [isMassAttack, setIsMassAttack] = useState(false);
 
   useEffect(() => {
     const { redTeam, orangeTeam } = TeamManager.initializeTeams();
@@ -63,6 +64,7 @@ const Battlefield = () => {
         setWinner(winner);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isInitialized, teams, [...Object.values(teams)]]);
 
   const handleHighlightUnit = (unit: Unit | null) => {
@@ -98,7 +100,18 @@ const Battlefield = () => {
     if (nextUnit.isAlive()) {
       setCurrentUnit(nextUnit);
 
-      const strategy = StrategyFactory.createStrategy(nextUnit.getActionType());
+      const nextUnitActionType = nextUnit.getActionType();
+
+      if (
+        nextUnitActionType === 'mageAttack' ||
+        nextUnitActionType === 'healMass'
+      ) {
+        setIsMassAttack(true);
+      } else {
+        setIsMassAttack(false);
+      }
+
+      const strategy = StrategyFactory.createStrategy(nextUnitActionType);
       strategy.highlightTargets(nextUnit, teams);
 
       setHighlightedUnit(nextUnit);
@@ -112,8 +125,6 @@ const Battlefield = () => {
 
         LogService.log(`Round ${roundNumber + 1} starts!`);
       }
-    } else {
-      console.warn('No alive units left');
     }
   };
 
@@ -127,6 +138,7 @@ const Battlefield = () => {
           currentUnitId={currentUnit?.id || ''}
           onEndTurn={nextTurn}
           allUnits={teams}
+          isMassAttack={isMassAttack}
         />
 
         <img src={vsImg} alt="vs" className={style.vsImg} />
@@ -138,6 +150,7 @@ const Battlefield = () => {
           currentUnitId={currentUnit?.id || ''}
           onEndTurn={nextTurn}
           allUnits={teams}
+          isMassAttack={isMassAttack}
         />
       </div>
       <RoundInfo

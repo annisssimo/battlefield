@@ -16,6 +16,7 @@ const GameUnitCard = ({
   generalAttackerActionType,
   isHoveringTargets,
   onUnitClick,
+  isMassAttack,
 }: GameUnitCardProps) => {
   const [isHovered, setIsHovered] = useState(false);
 
@@ -42,7 +43,7 @@ const GameUnitCard = ({
       onClick={onUnitClick}
     >
       {unit.state.isPossibleTarget &&
-        (isHovered || isHoveringTargets) &&
+        (isHovered || isHoveringTargets || isMassAttack) &&
         unit.isAlive() && (
           <ActionIcon
             actionType={generalAttackerActionType as GeneralActionType}
@@ -91,4 +92,5 @@ interface GameUnitCardProps {
   generalAttackerActionType: string | null;
   isHoveringTargets: boolean;
   onUnitClick: () => void;
+  isMassAttack: boolean;
 }

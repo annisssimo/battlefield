@@ -6,7 +6,11 @@ import { useCurrentUnit } from '../../shared/hooks/useCurrentUnit';
 import { useState } from 'react';
 import StrategyFactory from '../../features/battle/strategies/StrategyFactory';
 import StrategyContext from '../../features/battle/strategies/StrategyContext';
-import { GeneralActionType, TeamNames, AllUnits } from '../../shared/types/types';
+import {
+  GeneralActionType,
+  TeamNames,
+  AllUnits,
+} from '../../shared/types/types';
 
 const TeamField = ({
   team,
@@ -15,6 +19,7 @@ const TeamField = ({
   currentUnitId,
   onEndTurn,
   allUnits,
+  isMassAttack,
 }: TeamFieldProps) => {
   const { currentUnit } = useCurrentUnit();
   const [isHoveringTargets, setIsHoveringTargets] = useState(false);
@@ -71,6 +76,7 @@ const TeamField = ({
           generalAttackerActionType={generalAttackerActionType}
           isHoveringTargets={isHoveringTargets}
           onUnitClick={() => handleUnitClick(unit)}
+          isMassAttack={isMassAttack}
         />
       ))}
     </div>
@@ -86,4 +92,5 @@ interface TeamFieldProps {
   currentUnitId: string | null;
   onEndTurn: () => void;
   allUnits: AllUnits;
+  isMassAttack: boolean;
 }
